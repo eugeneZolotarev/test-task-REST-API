@@ -6,6 +6,7 @@ import com.eugene.testTask.exceptions.ResourceAlreadyExistsException;
 import com.eugene.testTask.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -48,6 +49,14 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
+
+    //Обработка случая, когда подается некорректный json файл
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        String message = "Возникла ошибка в структуре запроса";
+        return buildResponse(HttpStatus.BAD_REQUEST, message);
+    }
+
 
     //метод для формирования ответа с ошибкой
     private ResponseEntity<ErrorResponse> buildResponse(

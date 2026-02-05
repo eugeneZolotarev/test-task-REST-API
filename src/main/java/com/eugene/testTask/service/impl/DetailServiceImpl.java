@@ -76,6 +76,8 @@ public class DetailServiceImpl implements DetailService {
                 () -> new ResourceAlreadyExistsException("Деталь с id=" + id + " не существует")
         );
 
+        if (updateDetailDTO == null) return detailMapper.toDTO(detail);
+
         if (updateDetailDTO.decimalNumber() != null) {
             String newDecimal = updateDetailDTO.decimalNumber().trim().toUpperCase();
             if (!newDecimal.equals(detail.getDecimalNumber()) &&

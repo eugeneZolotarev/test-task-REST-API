@@ -1,6 +1,7 @@
 package com.eugene.testTask.service.impl;
 
 import com.eugene.testTask.dto.requestDTO.MaterialRequestDTO;
+import com.eugene.testTask.dto.requestDTO.UpdateMaterialDTO;
 import com.eugene.testTask.dto.responseDTO.MaterialResponseDTO;
 import com.eugene.testTask.exceptions.ResourceAlreadyExistsException;
 import com.eugene.testTask.exceptions.ResourceNotFoundException;
@@ -57,22 +58,26 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional
-    public MaterialResponseDTO updateMaterial(Long id, MaterialRequestDTO materialDTO) {
+    public MaterialResponseDTO updateMaterial(Long id, UpdateMaterialDTO materialDTO) {
         Material material = materialRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Материала с id=" + id + " не существует")
         );
 
-        if (!material.getName().equals(materialDTO.name().trim())) {
-            if (materialRepository.existsByName(materialDTO.name())) {
-                throw new ResourceAlreadyExistsException(
-                        "Материал с таким названием уже существует"
-                );
+        if (materialDTO == null) return materialMapper.toDTO(material);
+
+        if (materialDTO.name() != null) {
+            if (!material.getName().equals(materialDTO.name().trim())) {
+                if (materialRepository.existsByName(materialDTO.name())) {
+                    throw new ResourceAlreadyExistsException(
+                            "Материал с таким названием уже существует"
+                    );
+                }
             }
         }
 
-        material.setName(materialDTO.name().trim());
-        material.setDensity(materialDTO.density());
-        material.setElasticModulus(materialDTO.elasticModulus());
+        if (materialDTO.name() != null) material.setName(materialDTO.name().trim());
+        if (materialDTO.density() != null) material.setDensity(materialDTO.density());
+        if (materialDTO.elasticModulus() != null) material.setElasticModulus(materialDTO.elasticModulus());
         return materialMapper.toDTO(material);
     }
 

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/test_task_db
+      SPRING_DATASOURCE_USERNAME: test_task_db
+      SPRING_DATASOURCE_PASSWORD: test_task_db_password
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: test_task_db
+      POSTGRES_USER: test_task_db
+      POSTGRES_PASSWORD: test_task_db_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge
