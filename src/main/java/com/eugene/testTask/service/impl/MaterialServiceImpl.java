@@ -73,9 +73,9 @@ public class MaterialServiceImpl implements MaterialService {
                     );
                 }
             }
+            material.setName(materialDTO.name().trim());
         }
 
-        if (materialDTO.name() != null) material.setName(materialDTO.name().trim());
         if (materialDTO.density() != null) material.setDensity(materialDTO.density());
         if (materialDTO.elasticModulus() != null) material.setElasticModulus(materialDTO.elasticModulus());
         return materialMapper.toDTO(material);

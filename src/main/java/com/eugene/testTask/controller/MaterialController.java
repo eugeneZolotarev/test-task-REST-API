@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class MaterialController {
     )
     public ResponseEntity<MaterialResponseDTO> createMaterial(
             @Valid @RequestBody MaterialRequestDTO materialDTO) {
-        return ResponseEntity.ok(materialService.createMaterial(materialDTO));
+        return new ResponseEntity<>(materialService.createMaterial(materialDTO), HttpStatus.CREATED);
     }
 
     @GetMapping

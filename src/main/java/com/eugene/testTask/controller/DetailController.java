@@ -30,7 +30,7 @@ public class DetailController {
     )
     public ResponseEntity<DetailResponseDTO> createDetail(
             @Valid @RequestBody DetailRequestDTO detailDTO) {
-        return ResponseEntity.ok(detailService.createDetail(detailDTO));
+        return new ResponseEntity<>(detailService.createDetail(detailDTO), HttpStatus.CREATED);
     }
 
     @GetMapping

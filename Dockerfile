@@ -1,4 +1,3 @@
-# Use a multi-stage build to keep the final image small
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 COPY pom.xml .
