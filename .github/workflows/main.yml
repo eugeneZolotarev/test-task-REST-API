@@ -7,7 +7,7 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     services:
@@ -35,8 +35,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build and Test with Maven
-        run: mvn -B clean verify
+      - name: Build with Maven (Skip Tests)
+        run: mvn -B clean package -DskipTests
+
+      - name: Run Unit Tests
+        run: mvn -B test
         env:
           DB_HOST: localhost
           DB_PORT: 5432
